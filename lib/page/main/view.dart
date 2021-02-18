@@ -1,6 +1,7 @@
 import 'package:provider/provider.dart';
 import 'package:wood/core/router/routes.dart';
 import 'package:wood/data/status.dart';
+import 'package:wood/page/bookmark/state.dart';
 import 'package:wood/page/main/state.dart';
 import 'package:wood/page/menu/view.dart';
 import 'package:wood/widget/button_text.dart';
@@ -18,7 +19,7 @@ class Main extends StatefulWidget {
   final ScrollPageState scrollState;
   final int id;
 
-  const Main({Key key, this.scrollState, this.id});
+  const Main({this.scrollState, this.id});
 
   @override
   _MainState createState() => _MainState();
@@ -61,8 +62,9 @@ class _MainState extends State<Main> {
       }
     }
 
+    final bookmark = Provider.of<BookmarkController>(context, listen: false);
+
     return Scaffold(
-        key: scaffoldKey,
         backgroundColor: DesignConfig.backgroundColor,
         drawer: Menu(),
         appBar: AppBar(
@@ -88,7 +90,7 @@ class _MainState extends State<Main> {
           ],
         ),
         body: Consumer<MainController>(
-          builder: (context, mainData, child) {
+          builder: (_, mainData, child) {
             switch (mainData.status) {
               case Status.ready:
                 return RefreshIndicator(
@@ -208,8 +210,21 @@ class _MainState extends State<Main> {
                                       Navigator.pushNamed(
                                           context, Routes.oneProduct);
                                     },
-                                    iconOnTap: () {},
-                                    icon: Icons.favorite_border,
+                                    iconOnTap: () {
+                                      if (bookmark
+                                          .isBookmark(item.id)) {
+                                        bookmark
+                                            .removeBookmark(item.id);
+                                        item.bookmark = false;
+                                      } else {
+                                        bookmark.addBookmark(item.id, item);
+                                        item.bookmark = true;
+                                      }
+
+
+                                    },
+                                    icon:(bookmark.isBookmark(item.id))?
+                                    Icons.favorite: Icons.favorite_border,
                                     price: '${item.price.toString()} IRR',
                                     discount: (item.offerPrice != null) ?
                                     item.offerPrice.toString()

@@ -30,99 +30,99 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWrapper(
-      onTap: onTap,
-      highlightColor: DesignConfig.highlightColor,
-      splashColor: DesignConfig.splashColor,
-      child: Stack(
-        children: [
-          DefaultNetworkImage(
+    return Stack(
+      children: [
+        InkWrapper(
+          onTap: onTap,
+          highlightColor: DesignConfig.highlightColor,
+          splashColor: DesignConfig.splashColor,
+          child: DefaultNetworkImage(
             url: image,
             width: width,
             height: height,
             fit: BoxFit.cover,
           ),
-          Container(
+        ),
+        Container(
 
-            width: width,
-            height: height,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  width: double.infinity,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      (timer!= null)? Padding(
-                        padding: EdgeInsets.all(12),
-                        child: Text(
-                          timer,
-                          textDirection: TextDirection.ltr,
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                              color: DesignConfig.bookmarkColor,
-                              fontSize: DesignConfig.mediumFontSize,
-                              fontWeight: FontWeight.w400),
-                        ),
-                      ) : Container(),
-                      IconButton(
-                          icon: Icon(icon, color: DesignConfig.bookmarkColor),
-                          onPressed: iconOnTap,
-                          padding: EdgeInsets.zero,
-                          splashColor: DesignConfig.splashColor,
-                          highlightColor: DesignConfig.highlightColor),
-
-                    ],
-                  ),
-                ),
-
-                Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.all(12),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Container(
-                        color: DesignConfig.priceCardColor,
-                        padding: EdgeInsets.all(8),
-                        margin: EdgeInsets.symmetric(vertical: 8),
-                        child: Text(
-                          price,
-                          textDirection: TextDirection.ltr,
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                              color: DesignConfig.priceColor,
-                              fontSize: DesignConfig.mediumFontSize,
-                              fontWeight: FontWeight.w600),
-                        ),
+          width: width,
+          height: height,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: double.infinity,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    (timer!= null)? Padding(
+                      padding: EdgeInsets.all(12),
+                      child: Text(
+                        timer,
+                        textDirection: TextDirection.ltr,
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            color: DesignConfig.bookmarkColor,
+                            fontSize: DesignConfig.mediumFontSize,
+                            fontWeight: FontWeight.w400),
                       ),
-                      (discount != null)? Container(
-                        margin: EdgeInsets.symmetric(horizontal: 8),
-                        child: Text(
-                          discount,
-                          textDirection: TextDirection.ltr,
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                              color: DesignConfig.priceColor,
-                              fontSize: DesignConfig.mediumFontSize,
-                              fontWeight: FontWeight.w400,
-                              decoration: TextDecoration.lineThrough),
-                        ),
-                      ) : Container(),
-                    ],
-                  ),
-                )
-              ],
-            ),
-          )
-        ],
-      ),
+                    ) : Container(),
+                    IconButton(
+                        icon: Icon(icon, color: DesignConfig.bookmarkColor),
+                        onPressed: iconOnTap,
+                        padding: EdgeInsets.zero,
+                        splashColor: DesignConfig.splashColor,
+                        highlightColor: DesignConfig.highlightColor),
+
+                  ],
+                ),
+              ),
+
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.all(12),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Container(
+                      color: DesignConfig.priceCardColor,
+                      padding: EdgeInsets.all(8),
+                      margin: EdgeInsets.symmetric(vertical: 8),
+                      child: Text(
+                        price,
+                        textDirection: TextDirection.ltr,
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            color: DesignConfig.priceColor,
+                            fontSize: DesignConfig.mediumFontSize,
+                            fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                    (discount != null)? Container(
+                      margin: EdgeInsets.symmetric(horizontal: 8),
+                      child: Text(
+                        discount,
+                        textDirection: TextDirection.ltr,
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            color: DesignConfig.priceColor,
+                            fontSize: DesignConfig.mediumFontSize,
+                            fontWeight: FontWeight.w400,
+                            decoration: TextDecoration.lineThrough),
+                      ),
+                    ) : Container(),
+                  ],
+                ),
+              )
+            ],
+          ),
+        )
+      ],
     );
   }
 }

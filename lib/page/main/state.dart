@@ -141,11 +141,10 @@ class MainController extends ChangeNotifier{
       if (res.statusCode == 200) {
 
         var json = jsonDecode(res.body);
-        totalPage = json["products"]['total'];
-        List<dynamic> productData = json["products"]['data'];
+        totalPage = json["products"]["total"];
+        List<dynamic> productData = json["products"]["data"];
 
         if(totalPage >= page){
-          // products = productData.map((e) => Product.fromJson(e)).toList();
           productData.forEach((element) {
             products = productData.map((e) => Product.fromJson(e)).toList();
             if(products.isEmpty) {

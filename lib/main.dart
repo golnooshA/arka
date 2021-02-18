@@ -2,6 +2,7 @@ import 'package:wood/core/localization/app_localizations_delegate.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
+import 'package:wood/page/bookmark/state.dart';
 import 'package:wood/page/main/state.dart';
 import 'package:wood/page/main/view.dart';
 import 'core/config/design_config.dart';
@@ -21,6 +22,10 @@ void main() {
       ),
       ChangeNotifierProvider<ScrollPageState>(
         create: (context) => ScrollPageState(),
+      ),
+
+      ChangeNotifierProvider<BookmarkController>(
+        create: (context) => BookmarkController(),
       ),
 
 

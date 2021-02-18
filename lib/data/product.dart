@@ -14,6 +14,7 @@ class Product {
   final String image;
   final String stripDesc;
   bool cart ;
+  bool bookmark;
 
   Product.fromJson(Map<String, dynamic> json)
       : id = json['id'],
@@ -29,7 +30,8 @@ class Product {
         number = json['number'],
         image = json['image'],
         stripDesc = json['strip_desc'],
-        cart = false;
+        cart = false,
+  bookmark = false;
 
   Map<String, dynamic> toJson() =>
       {
@@ -47,6 +49,7 @@ class Product {
         'updatedAt': updatedAt,
         'stripDesc': stripDesc,
         'number': number,
+        'bookmark': bookmark
       };
 
 }
