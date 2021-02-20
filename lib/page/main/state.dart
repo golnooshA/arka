@@ -135,7 +135,7 @@ class MainController extends ChangeNotifier{
 
 
 
-      String urlP = 'https://p.kavakwood-app.ir/api/api/main-category/CategoryStore?page=$page';
+      String urlP = 'http://192.168.1.130:8000/api/api/main-category/CategoryStore?page=$page';
       final res = await http.get(urlP);
 
       if (res.statusCode == 200) {
@@ -191,7 +191,7 @@ class MainController extends ChangeNotifier{
       notifyListeners();
 
 
-      String urlP = 'https://p.kavakwood-app.ir/api/api/main-category/CategoryStore?page=$page';
+      String urlP = 'http://192.168.1.130:8000/api/api/main-category/CategoryStore?page=$page';
       final res = await http.get(urlP);
 
       if (res.statusCode == 200) {

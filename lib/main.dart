@@ -3,8 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:wood/page/bookmark/state.dart';
+import 'package:wood/page/discount/state.dart';
 import 'package:wood/page/main/state.dart';
 import 'package:wood/page/main/view.dart';
+import 'package:wood/page/search/state.dart';
+import 'package:wood/page/search/view.dart';
 import 'core/config/design_config.dart';
 import 'core/router/routes.dart';
 import 'core/storage/settings.dart';
@@ -26,6 +29,14 @@ void main() {
 
       ChangeNotifierProvider<BookmarkController>(
         create: (context) => BookmarkController(),
+      ),
+
+      ChangeNotifierProvider<SearchStateController>(
+        create: (context) => SearchStateController(),
+      ),
+
+      ChangeNotifierProvider<DiscountController>(
+        create: (context) => DiscountController(),
       ),
 
 

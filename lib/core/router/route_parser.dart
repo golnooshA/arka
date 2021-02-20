@@ -29,9 +29,6 @@ class RouteParser {
         case HttpConfig.host:
           return true;
 
-        case HttpConfig.siteHost:
-          return true;
-
         case '#':
           return true;
 

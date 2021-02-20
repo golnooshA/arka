@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:provider/provider.dart';
 import 'package:wood/core/router/routes.dart';
+import 'package:wood/data/product.dart';
 import 'package:wood/data/status.dart';
 import 'package:wood/page/bookmark/state.dart';
 import 'package:wood/page/main/state.dart';
@@ -13,7 +16,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:wood/core/config/design_config.dart';
+import 'package:wood/widget/timer_text.dart';
 import 'scroll_state.dart';
+import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 
 class Main extends StatefulWidget {
   final ScrollPageState scrollState;
@@ -51,6 +56,11 @@ class _MainState extends State<Main> {
       mainData.getData(id: widget.id, refresh: true);
       mainData.getProduct(id: widget.id, page: page);
     });
+
+
+
+
+
     super.initState();
   }
 
@@ -225,11 +235,11 @@ class _MainState extends State<Main> {
                                     },
                                     icon:(bookmark.isBookmark(item.id))?
                                     Icons.favorite: Icons.favorite_border,
-                                    price: '${item.price.toString()} IRR',
+                                    price: Product.formattedNumber(item.price, suffix: ' IRR'),
                                     discount: (item.offerPrice != null) ?
-                                    item.offerPrice.toString()
+                                    Product.formattedNumber(item.offerPrice, suffix: ' IRR')
                                         : '' ,
-                                    // timer: "09:09:06",
+                                   // timer: '09:08:31',
                                     image: item.image);
                               },
                             ),

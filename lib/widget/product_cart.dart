@@ -8,7 +8,7 @@ import 'default_network_image.dart';
 class ProductCard extends StatelessWidget {
   final Function onTap;
   final Function iconOnTap;
-  final String timer;
+  final Widget timer;
   final String price;
   final String discount;
   final IconData icon;
@@ -59,15 +59,16 @@ class ProductCard extends StatelessWidget {
                   children: [
                     (timer!= null)? Padding(
                       padding: EdgeInsets.all(12),
-                      child: Text(
-                        timer,
-                        textDirection: TextDirection.ltr,
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                            color: DesignConfig.bookmarkColor,
-                            fontSize: DesignConfig.mediumFontSize,
-                            fontWeight: FontWeight.w400),
-                      ),
+                      child: timer,
+                      // child: Text(
+                      //   timer,
+                      //   textDirection: TextDirection.ltr,
+                      //   textAlign: TextAlign.start,
+                      //   style: TextStyle(
+                      //       color: DesignConfig.bookmarkColor,
+                      //       fontSize: DesignConfig.mediumFontSize,
+                      //       fontWeight: FontWeight.w400),
+                      // ),
                     ) : Container(),
                     IconButton(
                         icon: Icon(icon, color: DesignConfig.bookmarkColor),
