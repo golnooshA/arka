@@ -34,7 +34,6 @@ class DefaultNetworkImage extends StatelessWidget {
               fit: fit,
             )),
       );
-    print("UUUUUUUUUUUURRRRRRRRRRRRRLLLLLLLLLLLLL$url");
     return CachedNetworkImage(
       imageUrl: url,
       width: width,

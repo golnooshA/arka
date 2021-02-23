@@ -2,7 +2,6 @@ import 'package:wood/core/storage/settings.dart';
 
 class HttpConfig {
   static const String host = '192.168.1.130:8000';
-  //static const String siteHost = '';
 
   static Uri uri(String path, {bool isApi = true, Map<String, String> queryParameters = const {}}){
     queryParameters = {

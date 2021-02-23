@@ -11,7 +11,6 @@ class DiscountController extends ChangeNotifier{
   Status status = Status.loading;
   Status pagination = Status.ready;
 
-
   List<Product> products = [];
 
   int totalPage =1;

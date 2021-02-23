@@ -36,7 +36,7 @@ class MainController extends ChangeNotifier{
       }
 
       String url =
-          'https://p.kavakwood-app.ir/api/api/main-category/CategoryStore';
+          'http://192.168.1.130:8000/api/api/main-category/CategoryStore';
 
       final res = await http.get(url);
 
@@ -77,7 +77,7 @@ class MainController extends ChangeNotifier{
       }
 
       String url =
-          'https://p.kavakwood-app.ir/api/api/main-category/CategoryStore';
+          'http://192.168.1.130:8000/api/api/sub-category/CategoryStore/$id';
 
       final res = await http.get(url);
 
@@ -191,7 +191,7 @@ class MainController extends ChangeNotifier{
       notifyListeners();
 
 
-      String urlP = 'http://192.168.1.130:8000/api/api/main-category/CategoryStore?page=$page';
+      String urlP = 'http://192.168.1.130:8000/api/api/sub-category/CategoryStore/$id?page=$page';
       final res = await http.get(urlP);
 
       if (res.statusCode == 200) {

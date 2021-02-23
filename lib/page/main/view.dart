@@ -1,12 +1,13 @@
 import 'dart:async';
-
 import 'package:provider/provider.dart';
 import 'package:wood/core/router/routes.dart';
 import 'package:wood/data/product.dart';
 import 'package:wood/data/status.dart';
 import 'package:wood/page/bookmark/state.dart';
+import 'package:wood/page/category/view.dart';
 import 'package:wood/page/main/state.dart';
 import 'package:wood/page/menu/view.dart';
+import 'package:wood/page/one_product/view.dart';
 import 'package:wood/widget/button_text.dart';
 import 'package:wood/widget/category_slider.dart';
 import 'package:wood/widget/error.dart';
@@ -56,11 +57,6 @@ class _MainState extends State<Main> {
       mainData.getData(id: widget.id, refresh: true);
       mainData.getProduct(id: widget.id, page: page);
     });
-
-
-
-
-
     super.initState();
   }
 
@@ -126,7 +122,16 @@ class _MainState extends State<Main> {
                                             textColor: DesignConfig.titleColor,
                                             buttonColor: DesignConfig
                                                 .primaryBackgroundColor,
-                                            onTap: () {}),
+                                            onTap: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) => ChangeNotifierProvider<MainController>(
+                                                      create: (_) => MainController(),
+                                                      child: Category(id: e.id, scrollState: widget.scrollState, title: e.name),
+                                                    )),
+                                              );
+                                            }),
                                       )
                                       .toList())),
 
@@ -217,8 +222,12 @@ class _MainState extends State<Main> {
                                 final item = mainData.products[index];
                                 return ProductCard(
                                     onTap: () {
-                                      Navigator.pushNamed(
-                                          context, Routes.oneProduct);
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                OneProduct(oneProduct: item)),
+                                      );
                                     },
                                     iconOnTap: () {
                                       if (bookmark

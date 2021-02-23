@@ -13,9 +13,8 @@ import '../../core/config/design_config.dart';
 class Search extends StatefulWidget {
 
   final ScrollPageState scrollState;
-  final int id;
 
-  const Search({this.scrollState, this.id});
+  const Search({this.scrollState});
 
   @override
   _SearchState createState() => _SearchState();
@@ -39,7 +38,7 @@ class _SearchState extends State<Search> {
       final searchData = Provider.of<SearchStateController>(context, listen: false);
       if (searchData.status == Status.ready) {
         page++;
-        await searchData.getProduct(searchText:'', page: page);
+        await searchData.getProduct(searchText:'',refresh: true);
 
       }
     }
@@ -51,7 +50,7 @@ class _SearchState extends State<Search> {
     scrollController.addListener(scrollListener);
     final searchData = Provider.of<SearchStateController>(context, listen: false);
     Future.delayed(Duration.zero, () async {
-      searchData.getProduct(searchText:'',page: page);
+      searchData.getProduct(searchText:'',refresh: true);
     });
     super.initState();
   }
@@ -185,7 +184,7 @@ class _SearchState extends State<Search> {
                           message: searchData.errorMessage,
                           buttonText: "try again",
                           onButtonTap: () {
-                            searchData.getProduct(searchText:'', page: page);
+                            searchData.getProduct(searchText:'',refresh: true);
                           }) ],
                   );
               }
@@ -201,6 +200,6 @@ class _SearchState extends State<Search> {
       val = '';
     }
     searchFocusNode.unfocus();
-    searchData.getProduct(searchText: val, page: page);
+    searchData.getProduct(searchText: val,refresh: true);
   }
 }

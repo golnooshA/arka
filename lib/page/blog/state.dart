@@ -1,64 +1,58 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:wood/data/article.dart';
+import 'package:wood/data/category.dart';
 import 'package:wood/data/product.dart';
 import 'package:wood/data/status.dart';
 import 'package:http/http.dart' as http;
 
-
-class SearchStateController extends ChangeNotifier{
-
+class BlogController extends ChangeNotifier {
   Status status = Status.loading;
+  Status pagination = Status.ready;
 
-  List<Product> products = [];
+  List<Article> articles = [];
+
+  int totalPage = 1;
 
   String errorMessage;
 
-
-  Future<void> getProduct({String searchText,bool refresh = false}) async {
-
-    if (products.length > 0 && !refresh) {
+  Future<void> getArticle({int id, bool refresh = false}) async {
+    if (articles.length > 0 && !refresh) {
       status = Status.ready;
       notifyListeners();
-    }
-
-    else{
+    } else {
       if (refresh) {
         status = Status.loading;
-        products = [];
-
+        articles = [];
+        totalPage = 1;
+        pagination = Status.ready;
       }
-
     }
-
     notifyListeners();
 
-
-    String urlP = 'http://192.168.1.130:8000/api/api/search/ProductStore?search=$searchText';
+    String urlP = 'http://192.168.1.130:8000/api/posts';
     final res = await http.get(urlP);
 
     if (res.statusCode == 200) {
-
       var json = jsonDecode(res.body);
-      List<dynamic> productData = json["products"]["data"];
+      totalPage = json["total"];
+      List<dynamic> productData = json["data"];
 
       productData.forEach((element) {
-        products = productData.map((e) => Product.fromJson(e)).toList();
-        if(products.isEmpty) {
+        articles = productData.map((e) => Article.fromJson(e)).toList();
+        if (articles.isEmpty) {
           status = Status.error;
           errorMessage = 'اطلاعات وجود ندارد';
-        }
-        else
+        } else
           status = Status.ready;
       });
 
       status = Status.ready;
+      pagination = Status.ready;
       notifyListeners();
-    }
-    else{
+    } else {
       throw Exception('***********Failed to load data************');
     }
-
   }
-
 
 }

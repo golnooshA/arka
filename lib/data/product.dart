@@ -11,6 +11,9 @@ class Product {
   final String thumbnail;
   final String createdAt;
   final String updatedAt;
+  final String thickness;
+  final String size;
+  final String weight;
   final int price;
   final int number;
   final String image;
@@ -18,6 +21,7 @@ class Product {
   final Duration offerRemaining;
   bool cart ;
   bool bookmark;
+  final int stock;
 
 
   static String formattedNumber(int number, {String suffix = ''}){
@@ -41,6 +45,10 @@ class Product {
         createdAt = json['created_at'],
         updatedAt = json['updated_at'],
         number = json['number'],
+        weight = json['weight'],
+        size = json['size'],
+        thickness = json['thickness'],
+        stock = json['stock'],
         image = json['image'] == null ? null : HttpConfig.url(json['image'], isApi: false),
         stripDesc = json['strip_desc'],
         offerRemaining = json['offer_remaining'] == null ? null : Duration(seconds: json['offer_remaining']),
@@ -55,6 +63,9 @@ class Product {
         'price': price,
         'image': image,
         'cart': cart,
+        'thickness': thickness,
+        'size': size,
+        'weight': weight,
         'offerDate': offerDate,
         'offerDateFarsi': offerDateFarsi,
         'offerPrice': offerPrice,
@@ -64,7 +75,8 @@ class Product {
         'stripDesc': stripDesc,
         'number': number,
         'offerRemaining': offerRemaining,
-        'bookmark': bookmark
+        'bookmark': bookmark,
+        'stock' : stock
       };
 
 }
