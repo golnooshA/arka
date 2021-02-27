@@ -152,7 +152,7 @@ class _CategoryState extends State<Category> {
                               return ProductCard(
                                   onTap: () {
                                     Navigator.pushNamed(
-                                        context, Routes.oneProduct);
+                                        context, Routes.oneProduct, arguments: item);
                                   },
                                   iconOnTap: () {
                                     if (bookmark

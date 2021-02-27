@@ -90,6 +90,19 @@ class Menu extends StatelessWidget {
                     },
                   ),
                   ListTile(
+                    title: Text('Edit Profile',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontSize: DesignConfig.textFontSize,
+                          color: DesignConfig.titleColor,
+                        )),
+                    // contentPadding: EdgeInsets.all(4),
+                    onTap: () {
+                      Navigator.pushNamed(
+                          context, Routes.editProfile);
+                    },
+                  ),
+                  ListTile(
                     title: Text('Products',
                         style: TextStyle(
                           fontWeight: FontWeight.w400,
@@ -141,6 +154,7 @@ class Menu extends StatelessWidget {
                           context, Routes.bookmark);
                     },
                   ),
+
                   ListTile(
                     title: Text('About Us',
                         style: TextStyle(

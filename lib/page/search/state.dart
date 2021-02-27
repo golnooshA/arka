@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:wood/component/list_view_controller/list_view_controller.dart';
 import 'package:wood/data/product.dart';
 import 'package:wood/data/status.dart';
 import 'package:http/http.dart' as http;
@@ -13,6 +14,9 @@ class SearchStateController extends ChangeNotifier{
 
   String errorMessage;
 
+  ListViewController listViewController;
+
+
 
   Future<void> getProduct({String searchText,bool refresh = false}) async {
 
@@ -25,9 +29,7 @@ class SearchStateController extends ChangeNotifier{
       if (refresh) {
         status = Status.loading;
         products = [];
-
       }
-
     }
 
     notifyListeners();

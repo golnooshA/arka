@@ -9,10 +9,10 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController numberController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
-  final FocusNode usernameFocusNode = FocusNode();
+  final FocusNode numberFocusNode = FocusNode();
   final FocusNode passwordFocusNode = FocusNode();
 
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
@@ -46,15 +46,15 @@ class _LoginState extends State<Login> {
                     children: [
                       TextFieldSimple(
                         title: "Username",
-                        controller: usernameController,
+                        controller: numberController,
                         margin: EdgeInsets.only(bottom: 4),
                         width: MediaQuery.of(context).size.width,
                         maxLines: 1,
-                        keyboardType: TextInputType.text,
+                        keyboardType: TextInputType.number,
                         keyboardButtonAction: TextInputAction.search,
-                        focusNode: usernameFocusNode,
+                        focusNode: numberFocusNode,
                         onFieldSubmitted: (s) {
-                          usernameFocusNode.unfocus();
+                          numberFocusNode.unfocus();
                           passwordFocusNode.requestFocus();
                         },
                       ),
@@ -87,3 +87,6 @@ class _LoginState extends State<Login> {
         ));
   }
 }
+
+
+

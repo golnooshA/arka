@@ -172,7 +172,7 @@ class _BlogState extends State<Blog> {
                                 ),
                               );
                             },
-                            childCount: 5
+                            childCount: blogData.articles.length
                         ),
                       ),
 

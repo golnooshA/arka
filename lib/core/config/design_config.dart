@@ -11,6 +11,7 @@ class DesignConfig {
   static const Color appBarOptionsColor  = Color(0xFF444645);
   static const Color checkoutColor  = Color(0xFF0059A2);
   static const Color cartNumberColor  = Color(0xFFFACD60);
+  static const Color primaryColor  = Color(0xFFFACD60);
   static const Color priceCardColor  = Color(0xFF2C8B08);
   static const Color priceColor  = Color(0xFFFFFFFF);
   static const Color emptyProductColor  = Color(0xFFE74645);
@@ -19,6 +20,7 @@ class DesignConfig {
   static const Color splashColor = Colors.black12;
   static const Color highlightColor = Colors.black12;
   static const Color secondaryAppBarColor = Color(0xFF354463);
+  static const Color errorColor = Color(0xFFE74645);
 
 
   static const double tinyFontSize = 10;

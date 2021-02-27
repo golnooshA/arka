@@ -1,12 +1,8 @@
 import 'package:wood/core/router/routes.dart';
-import 'package:wood/page/menu/view.dart';
 import 'package:wood/widget/button_text.dart';
-import 'package:wood/widget/category_slider.dart';
 import 'package:wood/widget/default_network_image.dart';
 import 'package:wood/widget/ink_wrapper.dart';
-import 'package:wood/widget/product_cart.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import '../../core/config/design_config.dart';
 
 class Cart extends StatefulWidget {

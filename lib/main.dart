@@ -5,10 +5,9 @@ import 'package:provider/provider.dart';
 import 'package:wood/page/blog/state.dart';
 import 'package:wood/page/bookmark/state.dart';
 import 'package:wood/page/discount/state.dart';
+import 'package:wood/page/gallery/state.dart';
 import 'package:wood/page/main/state.dart';
-import 'package:wood/page/main/view.dart';
 import 'package:wood/page/search/state.dart';
-import 'package:wood/page/search/view.dart';
 import 'core/config/design_config.dart';
 import 'core/router/routes.dart';
 import 'core/storage/settings.dart';
@@ -49,6 +48,10 @@ void main() {
         create: (context) => OneBlogController(),
       ),
 
+      ChangeNotifierProvider<GalleryController>(
+        create: (context) => GalleryController(),
+      ),
+
 
     ],
     child: Consumer<Settings>(
@@ -59,7 +62,6 @@ void main() {
               child: Image.asset("assets/splash.jpg", width: 400, height: 400, fit: BoxFit.cover));
         }
         return MaterialApp(
-          // initialRoute: settings.getInitRoute(),
           initialRoute: Routes.home,
           onGenerateRoute: Routes.onGenerateRoutes,
           localizationsDelegates: [

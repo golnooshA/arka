@@ -1,17 +1,25 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:wood/component/http_request/http_request.dart';
+import 'package:wood/core/config/http_config.dart';
 import 'package:wood/data/category.dart';
 import 'package:wood/data/product.dart';
 import 'package:wood/data/status.dart';
 import 'package:http/http.dart' as http;
 
 
-class DiscountController extends ChangeNotifier{
+class CartController extends ChangeNotifier{
 
   Status status = Status.loading;
   Status pagination = Status.ready;
 
   List<Product> products = [];
+  List<int> ids;
+
+  int totalPrice = 0;
+  int productPrice = 0;
+
+  Map<int, Product> storageCart = {};
 
   int totalPage =1;
 
@@ -19,9 +27,16 @@ class DiscountController extends ChangeNotifier{
 
   Future<void> getProduct({int id, bool refresh = false}) async {
 
-    if ( products.length>0 && !refresh) {
+    if (products.length>0 && !refresh) {
       status = Status.ready;
       notifyListeners();
+    }
+
+    if(ids == null || ids.isEmpty){
+      status = Status.empty;
+      errorMessage = "Cart is empty";
+      notifyListeners();
+      return;
     }
 
     else {
@@ -35,9 +50,16 @@ class DiscountController extends ChangeNotifier{
     notifyListeners();
 
 
+    final res = await PostRequest(
+        url: HttpConfig.url('api/store-product-ids'),
+        reqBody: {
+          'ids': ids
+        }
+    ).responseJson();
 
-    String urlP = 'http://192.168.1.130:8000/api/api/offer-products';
-    final res = await http.get(urlP);
+    errorMessage =null;
+
+    // final res = await http.get(urlP);
 
     if (res.statusCode == 200) {
 
@@ -50,9 +72,15 @@ class DiscountController extends ChangeNotifier{
         if(products.isEmpty) {
           status = Status.error;
           errorMessage = 'اطلاعات وجود ندارد';
+          notifyListeners();
+          return;
         }
-        else
+        else {
+          productData = [];
           status = Status.ready;
+          notifyListeners();
+          return;
+        }
       });
 
       status = Status.ready;

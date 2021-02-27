@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wood/data/article.dart';
+import 'package:wood/data/status.dart';
 import 'package:wood/page/one_blog/state.dart';
 import 'package:wood/widget/default_network_image.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
-import 'package:flutter_widget_from_html_core/apt/html_options.dart'
-;import '../../core/config/design_config.dart';
+import 'package:flutter_widget_from_html_core/apt/html_options.dart';
+import 'package:wood/widget/error.dart';
+import 'package:wood/widget/loading.dart';
+import '../../core/config/design_config.dart';
+
+
 
 class OneBlog extends StatefulWidget {
 
@@ -23,6 +28,7 @@ class _OneBlogState extends State<OneBlog> {
 
   void initState() {
     final blogData = Provider.of<OneBlogController>(context, listen: false);
+    print(widget.article);
     Future.delayed(Duration.zero, () async {
       blogData.getOneArticle(id: widget.article.id);
     });
@@ -38,51 +44,60 @@ class _OneBlogState extends State<OneBlog> {
           backgroundColor: Colors.transparent,
           iconTheme: IconThemeData(color: DesignConfig.appBarOptionsColor),
           elevation: 0),
-      body: CustomScrollView(
-        slivers: [
-          SliverToBoxAdapter(
-            child: DefaultNetworkImage(
-              url: widget.article.image,
-              fit: BoxFit.cover,
-              margin: EdgeInsets.zero,
-              height: MediaQuery.of(context).size.height / 2.3,
-              width: MediaQuery.of(context).size.width,
-            ),
-          ),
-          SliverToBoxAdapter(
-            child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-              child: Text(widget.article.name,
-                textDirection: TextDirection.ltr,
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                    color: DesignConfig.titleColor,
-                    fontSize: DesignConfig.appBarTextFontSize,
-                    fontWeight: FontWeight.w400),
-              ),
-            ),
-          ),
+      body: Consumer<OneBlogController>(
+        builder: (_, blogData, child) {
 
-          SliverToBoxAdapter(
-            child: Container(
-              margin: EdgeInsets.only(bottom: 20, left: 20, right: 20),
-              child: HtmlWidget(
-                widget.article.description,
-                textStyle: TextStyle(
-                  fontSize: DesignConfig.textFontSize,
-                  color: Colors.black,
-                ),
-                htmlOptions: HtmlOptions(
-                  textAlign: TextAlign.justify,
-                  textFontSize: DesignConfig.textFontSize,
-                  textColor: Colors.black,
-                  selectableText: true,
+          print("**********before consumer**********");
+
+          return CustomScrollView(
+            slivers: [
+              SliverToBoxAdapter(
+                child: DefaultNetworkImage(
+                  url: widget.article.image,
+                  // url: 'https://shop98ia.ir/upload/2019/12/06/c5fac9159f002d0-6ba7d6869f3-07b0c467832.jpg',
+                  fit: BoxFit.cover,
+                  margin: EdgeInsets.zero,
+                  height: MediaQuery.of(context).size.height / 2.3,
+                  width: MediaQuery.of(context).size.width,
                 ),
               ),
-            ),
-          )
-        ],
-      ),
+
+              SliverToBoxAdapter(
+                child: Container(
+                  margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  child: Text(widget.article.name,
+                    textDirection: TextDirection.ltr,
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                        color: DesignConfig.titleColor,
+                        fontSize: DesignConfig.appBarTextFontSize,
+                        fontWeight: FontWeight.w400),
+                  ),
+                ),
+              ),
+              SliverToBoxAdapter(
+                child: Container(
+                  margin: EdgeInsets.only(bottom: 20, left: 10, right: 10),
+                  child: HtmlWidget(
+                    widget.article.description,
+                    textStyle: TextStyle(
+                      fontSize: DesignConfig.textFontSize,
+                      color: Colors.black,
+                    ),
+                    htmlOptions: HtmlOptions(
+                      direction: TextDirection.ltr,
+                      textAlign: TextAlign.justify,
+                      textFontSize: DesignConfig.textFontSize,
+                      textColor: Colors.black,
+                      selectableText: true,
+                    ),
+                  ),
+                ),
+              )
+            ],
+          );
+        },
+      )
     );
   }
 }

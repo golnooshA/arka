@@ -2,9 +2,6 @@ import 'package:provider/provider.dart';
 import 'package:wood/core/router/routes.dart';
 import 'package:wood/data/status.dart';
 import 'package:wood/page/discount/state.dart';
-import 'package:wood/page/menu/view.dart';
-import 'package:wood/widget/button_text.dart';
-import 'package:wood/widget/category_slider.dart';
 import 'package:wood/widget/error.dart';
 import 'package:wood/widget/loading.dart';
 import 'package:wood/widget/product_cart.dart';
@@ -14,6 +11,12 @@ import 'package:wood/widget/timer_text.dart';
 import '../../core/config/design_config.dart';
 
 class Discount extends StatefulWidget {
+
+  final int id;
+
+  const Discount({this.id});
+
+
   @override
   _DiscountState createState() => _DiscountState();
 }
@@ -24,10 +27,9 @@ class _DiscountState extends State<Discount> {
   ScrollController scrollController;
   void initState() {
     scrollController = ScrollController();
-    // scrollController.addListener(scrollListener);
     final discountData = Provider.of<DiscountController>(context, listen: false);
     Future.delayed(Duration.zero, () async {
-      discountData.getProduct();
+      discountData.getProduct(id: widget.id);
     });
     super.initState();
   }
@@ -56,7 +58,7 @@ class _DiscountState extends State<Discount> {
             case Status.ready:
               return RefreshIndicator(
                   onRefresh: () async {
-                    await discountData.getProduct();
+                    await discountData.getProduct(id: widget.id);
                   },
                   child: CustomScrollView(
                     controller: scrollController,
@@ -100,7 +102,7 @@ class _DiscountState extends State<Discount> {
                               return ProductCard(
                                   onTap: () {
                                     Navigator.pushNamed(
-                                        context, Routes.oneProduct);
+                                        context, Routes.oneProduct, arguments: item);
                                   },
                                   iconOnTap: () {},
                                   icon:Icons.favorite_border,
@@ -146,7 +148,7 @@ class _DiscountState extends State<Discount> {
                      message: discountData.errorMessage,
                      buttonText: "try again",
                      onButtonTap: () {
-                       discountData.getProduct();
+                       discountData.getProduct(id: widget.id);
                      }
                  )
                 ],

@@ -1,13 +1,19 @@
+import 'package:wood/data/article.dart';
+import 'package:wood/data/product.dart';
 import 'package:wood/page/about_us/view.dart';
 import 'package:wood/page/blog/view.dart';
 import 'package:wood/page/bookmark/view.dart';
 import 'package:wood/page/category/view.dart';
 import 'package:wood/page/contact_us/view.dart';
 import 'package:wood/page/discount/view.dart';
+import 'package:wood/page/edit_profile/view.dart';
+import 'package:wood/page/gallery/state.dart';
 import 'package:wood/page/gallery/view.dart';
 import 'package:wood/page/login/view.dart';
+import 'package:wood/page/main/state.dart';
 import 'package:wood/page/main/view.dart';
 import 'package:wood/page/menu/view.dart';
+import 'package:wood/page/one_blog/state.dart';
 import 'package:wood/page/one_blog/view.dart';
 import 'package:wood/page/one_product/view.dart';
 import 'package:wood/page/page_not_found/view.dart';
@@ -33,6 +39,7 @@ class Routes {
   static const cart = '/cart';
   static const blog = '/blog';
   static const oneBlog = '/one_blog';
+  static const editProfile = '/edit_profile';
 
   static Route<dynamic> onGenerateRoutes(RouteSettings rawSettings) {
 
@@ -73,12 +80,27 @@ class Routes {
         break;
 
       case Routes.oneProduct:
-        page = OneProduct();
+        if(settings.arguments is! Product){
+          page = PageNotFoundPage();
+          break;
+        }
+        page = ChangeNotifierProvider<MainController>(
+          create: (_) => MainController(),
+          child: OneProduct(oneProduct: settings.arguments),
+        );
         break;
 
       case Routes.gallery:
-        page = Gallery();
+        if(settings.arguments is! int){
+          page = PageNotFoundPage();
+          break;
+        }
+        page = ChangeNotifierProvider<GalleryController>(
+          create: (_) => GalleryController(),
+          child: Gallery(id: settings.arguments),
+        );
         break;
+
 
       case Routes.aboutUs:
         page = AboutUs();
@@ -96,12 +118,23 @@ class Routes {
         page = Cart();
         break;
 
+      case Routes.editProfile:
+        page = EditProfile();
+        break;
+
       case Routes.blog:
         page = Blog();
         break;
 
       case Routes.oneBlog:
-        page = OneBlog();
+        if(settings.arguments is! Article){
+          page = PageNotFoundPage();
+          break;
+        }
+        page = ChangeNotifierProvider<OneBlogController>(
+          create: (_) => OneBlogController(),
+          child: OneBlog(article: settings.arguments),
+        );
         break;
 
 

@@ -1,59 +1,52 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:wood/data/article.dart';
-import 'package:wood/data/category.dart';
 import 'package:wood/data/product.dart';
 import 'package:wood/data/status.dart';
 import 'package:http/http.dart' as http;
 
-class OneBlogController extends ChangeNotifier {
+class GalleryController extends ChangeNotifier {
   Status status = Status.loading;
   Status pagination = Status.ready;
 
-  Article postData;
+  Product productData;
   List<String> images = [];
 
   int totalPage = 1;
 
   String errorMessage;
 
-  Future<void> getOneArticle({int id, bool refresh = false}) async  {
+  Future<void> getImages({int id, bool refresh = false}) async  {
 
     if (!refresh) {
-      print("************if one************");
 
       status = Status.ready;
       notifyListeners();
     }
 
     if( refresh){
-      print("************if two************");
 
       status = Status.loading;
-      postData = null;
+      productData = null;
     }
 
-    if(postData!=null){
-      print("************if three empty************");
+    if(productData!=null){
 
       status = Status.empty;
     }
 
     String url =
-        'http://192.168.1.130:8000/api/posts/$id';
+        'http://192.168.1.130:8000/api/products/$id';
     final res = await http.get(url);
 
     if (res.statusCode == 200) {
-      print("************res.statusCode************$res");
-
 
       var json = jsonDecode(res.body);
 
-      print("************json************$json");
 
 
-      postData = Article.fromJson(json['post']);
-      images = List<String>.from(json['image'] == null ?  [] : json['image']);
+      productData = Product.fromJson(json['product']);
+      images = List<String>.from(json['images'] == null ?  [] : json['images']);
+      print("*****Images******$images");
 
       status = Status.ready;
       notifyListeners();

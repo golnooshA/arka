@@ -1,4 +1,5 @@
 import 'package:provider/provider.dart';
+import 'package:wood/data/product.dart';
 import 'package:wood/data/status.dart';
 import 'package:wood/page/main/scroll_state.dart';
 import 'package:wood/page/search/state.dart';
@@ -57,6 +58,11 @@ class _SearchState extends State<Search> {
 
   @override
   Widget build(BuildContext context) {
+    if(!focusRequested){
+      searchFocusNode.requestFocus();
+      focusRequested = true;
+    }
+
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: DesignConfig.backgroundColor,
@@ -97,6 +103,7 @@ class _SearchState extends State<Search> {
               switch (searchData.status) {
                 case Status.ready:
                   return CustomScrollView(
+                    controller: scrollController,
                     slivers: [
                       SliverList(
                         delegate: SliverChildBuilderDelegate(
@@ -143,7 +150,7 @@ class _SearchState extends State<Search> {
                                           Container(
                                             margin: EdgeInsets.only(left: 8,right: 8, top: 4),
                                             child: Text(
-                                              item.price.toString(),
+                                              Product.formattedNumber(item.price, suffix: ' IRR'),
                                               textDirection: TextDirection.ltr,
                                               textAlign: TextAlign.start,
                                               maxLines: 1,
