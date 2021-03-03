@@ -1,27 +1,26 @@
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
+import 'package:wood/core/localization/language.dart';
+import 'package:wood/core/router/routes.dart';
 import 'dart:ui';
 import 'package:wood/core/storage/settings.dart';
 import 'package:wood/core/helper/ui.dart' as ui;
 import 'package:wood/data/city.dart';
 import 'package:wood/data/province.dart';
-import 'package:wood/page/main/view.dart';
 import 'package:wood/widget/action_sheet_simple.dart';
 import 'package:wood/widget/button_text.dart';
-import 'package:wood/widget/default_network_image.dart';
 import 'package:wood/widget/form.dart';
 import 'package:wood/widget/ink_wrapper.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:wood/widget/set_state.dart';
 import '../../core/config/design_config.dart';
 
 class EditProfile extends StatefulWidget {
   @override
-  _GalleryState createState() => _GalleryState();
+  _EditProfileState createState() => _EditProfileState();
 }
 
-class _GalleryState extends State<EditProfile> {
+class _EditProfileState extends State<EditProfile> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController postalCodeController = TextEditingController();
   final TextEditingController addressController = TextEditingController();
@@ -33,6 +32,7 @@ class _GalleryState extends State<EditProfile> {
   String provinceText = 'Province';
 
   Settings settings;
+  Language language;
 
   bool isLoading = false;
   final SetStateController buttonController = SetStateController();
@@ -44,27 +44,92 @@ class _GalleryState extends State<EditProfile> {
 
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
-  // @override
-  // void initState() {
-  //   if (settings == null) {
-  //     settings = Provider.of<Settings>(context, listen: false);
-  //   }
-  //   nameController.text = settings.user.name;
-  //   postalCodeController.text = settings.user?.postalCode?.toString() ?? '';
-  //   addressController.text = settings.user?.address ?? '';
-  //   if(settings.user.province != null){
-  //     selectedProvince = Province(
-  //         name: settings.user.province,
-  //         cities: []
-  //     );
-  //   }
-  //   if(settings.user.city != null){
-  //     selectedCity = City(
-  //       name: settings.user.province,
-  //     );
-  //   }
-  //   super.initState();
-  // }
+  @override
+  void initState() {
+    if (settings == null) {
+      settings = Provider.of<Settings>(context, listen: false);
+    }
+    nameController.text = settings.user.name;
+    postalCodeController.text = settings.user?.postalCode?.toString() ?? '';
+    addressController.text = settings.user?.address ?? '';
+    if(settings.user.province != null){
+      selectedProvince = Province(
+          name: settings.user.province,
+          cities: []
+      );
+    }
+    if(settings.user.city != null){
+      selectedCity = City(
+        name: settings.user.province,
+      );
+    }
+    super.initState();
+  }
+
+
+  Future<void> sendInformation(BuildContext context) async{
+
+    final name = nameController.text.trim();
+
+    if(name == null){
+      return ui.showSnackBar(
+          context: context,
+          text: "name field should not be empty"
+      );
+    }
+
+
+    final postalCode = postalCodeController.text.trim();
+
+    if(postalCode == null){
+      return ui.showSnackBar(
+          context: context,
+          text: "postal code field should not be empty"
+      );
+    }
+
+
+    final address = addressController.text.trim();
+
+    if(address == null){
+      return ui.showSnackBar(
+          context: context,
+          text: "fill address text field"
+      );
+    }
+
+
+    if((provinceController == null && provinceController != null) || (citiesController == null && citiesController != null)){
+      return ui.showSnackBar(
+          context: context,
+          text: 'select a province then a city'
+      );
+    }
+
+    isLoading = true;
+
+    buttonController.setState();
+    final res = await settings.editProfile
+      (name: nameController.text,
+    address: address == '' ? null : addressController.text,
+    postalCode: postalCode == '' ? null : postalCodeController.text,
+    province: selectedProvince ?.name,
+    city:  selectedCity?.name);
+
+    isLoading = false;
+    buttonController.setState();
+
+    ui.showSnackBar(
+        context: context,
+        text: 'edit your profile',
+      backgroundColor: Colors.green
+    );
+    if(res.isOk){
+      Navigator.pushNamedAndRemoveUntil(context, Routes.home, (route) => false);
+    }
+
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +157,7 @@ class _GalleryState extends State<EditProfile> {
               child: Column(
                 children: [
                   TextFieldSimple(
-                    title: "Username",
+                    title: "Name",
                     controller: nameController,
                     margin: EdgeInsets.only(bottom: 4, top: 40),
                     width: MediaQuery.of(context).size.width,
@@ -225,17 +290,29 @@ class _GalleryState extends State<EditProfile> {
                     keyboardType: TextInputType.text,
                     keyboardButtonAction: TextInputAction.search,
                     focusNode: addressFocus,
-                    onFieldSubmitted: (s) {},
+                    onFieldSubmitted: (s) {
+                      sendInformation(context);
+                    },
                   ),
-                  ButtonText(
-                      textColor: DesignConfig.textFieldColor,
-                      minWidth: MediaQuery.of(context).size.width,
-                      text: 'LOGIN',
-                      buttonColor: Colors.transparent,
-                      borderColor: DesignConfig.textFieldColor,
-                      onTap: () {},
-                      height: 50,
-                      margin: EdgeInsets.only(bottom: 20, top: 30)),
+
+                  SetState(
+                    controller: buttonController,
+                    builder: (){
+                      return   ButtonText(
+                          textColor: DesignConfig.textFieldColor,
+                          minWidth: MediaQuery.of(context).size.width,
+                          text: 'Edit Profile',
+                          buttonColor: Colors.transparent,
+                          borderColor: DesignConfig.textFieldColor,
+                          onTap: (){
+                            sendInformation(context);
+                          },
+                          height: 50,
+                          margin: EdgeInsets.only(bottom: 20));
+                    },
+                  )
+
+
                 ],
               ),
             ),
