@@ -20,7 +20,6 @@ class Product {
   final String stripDesc;
   final Duration offerRemaining;
   bool cart;
-
   bool bookmark;
   final int stock;
   final List<String> gallery;

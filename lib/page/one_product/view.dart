@@ -136,29 +136,40 @@ class _OneProductState extends State<OneProduct> {
                                             color: DesignConfig.bookmarkColor,
                                             size: 30),
                                         onPressed: () {
-                                          final count = cartController
-                                              .storageCart[widget.oneProduct.id]
-                                              ?.count;
-                                          if (count != null &&
-                                              widget.oneProduct.number <=
-                                                  count) {
+
+                                          print("******Clicking on button******");
+
+                                          if(!settings.isSoftLogin()){
+
+                                            print("******!settings.isSoftLogin()******");
                                             ui.showSnackBar(
                                                 context: context,
-                                                text: 'Out of Stock');
+                                                text: 'should login',
+                                              backgroundColor: Colors.orange
+                                            );
                                             return;
                                           }
-                                          if (widget.oneProduct.number < 1) {
+                                          final count = cartController.storageCart[widget.oneProduct.id]?.count;
+                                          if(count != null && widget.oneProduct.number <= count){
+                                            print("******count != null && widget.oneProduct.number <= count******");
+
                                             ui.showSnackBar(
                                                 context: context,
-                                                text: 'Out of stock');
+                                                text: 'finish'
+                                            );
                                             return;
                                           }
-                                          cartController.setToCart(
-                                              widget.oneProduct.withCount(
-                                                  count: count == null
-                                                      ? 1
-                                                      : count + 1),
-                                              notify: true);
+                                          if(widget.oneProduct.number < 1){
+                                            print("******widget.oneProduct.number < 1******");
+
+                                            ui.showSnackBar(
+                                                context: context,
+                                                text: 'finish'
+                                            );
+                                            return;
+                                          }
+                                          cartController.setToCart(widget.oneProduct.withCount(count: count == null ? 1 : count + 1), notify: true);
+
                                         },
                                         padding: EdgeInsets.zero,
                                         splashColor: DesignConfig.splashColor,
@@ -168,8 +179,8 @@ class _OneProductState extends State<OneProduct> {
 
                                   //It is cart products number
                                   Consumer<CartController>(
-                                    builder: (_, cartData, child) {
-                                      return cartData.storageCart[widget.oneProduct.id]
+                                    builder: (_, cartController, child) {
+                                      return cartController.storageCart[widget.oneProduct.id]
                                           ?.count == null ? Container() : Container(
                                         width: 24,
                                         height: 24,
@@ -178,7 +189,7 @@ class _OneProductState extends State<OneProduct> {
                                         decoration: BoxDecoration(
                                             color: DesignConfig.cartNumberColor,
                                             shape: BoxShape.circle),
-                                        child: Text(cartData.storageCart[widget.oneProduct
+                                        child: Text(cartController.storageCart[widget.oneProduct
                                             .id]?.count.toString(),
 
                                           textAlign: TextAlign.center,

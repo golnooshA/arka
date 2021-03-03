@@ -244,10 +244,8 @@ class _MainState extends State<Main> {
                                     },
                                     icon:(bookmark.isBookmark(item.id))?
                                     Icons.favorite: Icons.favorite_border,
-                                    price: Product.formattedNumber(item.price, suffix: ' IRR'),
-                                    discount: (item.offerPrice != null) ?
-                                    Product.formattedNumber(item.offerPrice, suffix: ' IRR')
-                                        : '' ,
+                                    price: item.price.toString() != null ? Product.formattedNumber(item.price, suffix: ' IRR') :'',
+                                    discount: (item.offerPrice != null) ? Product.formattedNumber(item.offerPrice, suffix: ' IRR') : '' ,
                                    // timer: '09:08:31',
                                     image: item.image);
                               },

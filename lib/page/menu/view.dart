@@ -1,10 +1,19 @@
+import 'package:provider/provider.dart';
 import 'package:wood/core/config/design_config.dart';
 import 'package:wood/core/router/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:wood/core/storage/settings.dart';
+import 'package:wood/page/cart/state.dart';
 
 class Menu extends StatelessWidget {
+
+
+
   @override
   Widget build(BuildContext context) {
+    final settings = Provider.of<Settings>(context, listen: false);
+    final cartData = Provider.of<CartController>(context, listen: false);
+
     return Container(
       decoration: BoxDecoration(
           borderRadius: BorderRadius.only(
@@ -49,23 +58,22 @@ class Menu extends StatelessWidget {
                               onPressed: () {}),
 
                           //It is cart products number
-                          Container(
-                            width: 24,
-                            height: 24,
-                            padding: EdgeInsets.all(4),
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                                color: DesignConfig.cartNumberColor,
-                                shape: BoxShape.circle),
-                            child: Text(
-                              '0',
-                              textDirection: TextDirection.ltr,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: DesignConfig.titleColor,
-                                  fontSize: DesignConfig.tinyFontSize,
-                                  fontWeight: FontWeight.w600),
-                            ),
+                          Consumer<CartController>(
+                            builder: (_, cartData, child) {
+                              return cartData.totalCount <= 0 ? Container() : Container(
+                              width: 24,
+                              height: 24,
+                              padding: EdgeInsets.all(4),
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(color: DesignConfig.cartNumberColor, shape: BoxShape.circle),
+                              child: Text(cartData.totalCount.toString(),
+
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: DesignConfig.titleColor, fontSize: DesignConfig.tinyFontSize, fontWeight: FontWeight.w600),
+                              ),
+                            );
+                            },
                           ),
                         ],
                       )
@@ -75,113 +83,141 @@ class Menu extends StatelessWidget {
               ),
               Expanded(
                 flex: 8,
-                child: ListView(children: [
-                  ListTile(
-                    title: Text('Login',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: DesignConfig.textFontSize,
-                          color: DesignConfig.titleColor,
-                        )),
-                    // contentPadding: EdgeInsets.all(4),
-                    onTap: () {
-                      Navigator.pushNamed(
-                          context, Routes.login);
-                    },
-                  ),
-                  ListTile(
-                    title: Text('Edit Profile',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: DesignConfig.textFontSize,
-                          color: DesignConfig.titleColor,
-                        )),
-                    // contentPadding: EdgeInsets.all(4),
-                    onTap: () {
-                      Navigator.pushNamed(
-                          context, Routes.editProfile);
-                    },
-                  ),
-                  ListTile(
-                    title: Text('Products',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: DesignConfig.textFontSize,
-                          color: DesignConfig.titleColor,
-                        )),
-                    // contentPadding: EdgeInsets.all(4),
-                    onTap: () {
-                      Navigator.pushNamed(
-                          context, Routes.home);
-                    },
-                  ),
-                  ListTile(
-                    title: Text('Blog',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: DesignConfig.textFontSize,
-                          color: DesignConfig.titleColor,
-                        )),
-                    // contentPadding: EdgeInsets.all(4),
-                    onTap: () {
-                      Navigator.pushNamed(
-                          context, Routes.blog);
-                    },
-                  ),
-                  ListTile(
-                    title: Text('My Cart',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: DesignConfig.textFontSize,
-                          color: DesignConfig.titleColor,
-                        )),
-                    // contentPadding: EdgeInsets.all(4),
-                    onTap: () {
-                      Navigator.pushNamed(
-                          context, Routes.cart);
-                    },
-                  ),
-                  ListTile(
-                    title: Text('Favorite',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: DesignConfig.textFontSize,
-                          color: DesignConfig.titleColor,
-                        )),
-                    // contentPadding: EdgeInsets.all(4),
-                    onTap: () {
-                      Navigator.pushNamed(
-                          context, Routes.bookmark);
-                    },
-                  ),
+                child:  Consumer<Settings>(builder: (_, settings, child){
+                  return  ListView(
+                    children: [
+                      if(!settings.isSoftLogin())
+                        ListTile(
+                          title: Text('Login',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w400,
+                                fontSize: DesignConfig.textFontSize,
+                                color: DesignConfig.titleColor,
+                              )),
+                          // contentPadding: EdgeInsets.all(4),
+                          onTap: () {
+                            // Navigator.pop(context);
+                            Navigator.pushNamed(
+                                context, Routes.login);
+                          },
+                        ),
 
-                  ListTile(
-                    title: Text('About Us',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: DesignConfig.textFontSize,
-                          color: DesignConfig.titleColor,
-                        )),
-                    // contentPadding: EdgeInsets.all(4),
-                    onTap: () {
-                      Navigator.pushNamed(
-                          context, Routes.aboutUs);
-                    },
-                  ),
-                  ListTile(
-                    title: Text('Contact Us',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: DesignConfig.textFontSize,
-                          color: DesignConfig.titleColor,
-                        )),
-                    // contentPadding: EdgeInsets.all(4),
-                    onTap: () {
-                      Navigator.pushNamed(
-                          context, Routes.contactUs);
-                    },
-                  ),
-                ]),
+                      if(settings.isSoftLogin())
+                        ListTile(
+                          title: Text('Logout',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w400,
+                                fontSize: DesignConfig.textFontSize,
+                                color: DesignConfig.titleColor,
+                              )),
+                          // contentPadding: EdgeInsets.all(4),
+                          onTap: () async{
+                            await settings.logout();
+                            Navigator.pop(context);
+                          },
+                        ),
+
+                      if(settings.isSoftLogin())
+                        ListTile(
+                          title: Text('Edit Profile',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w400,
+                                fontSize: DesignConfig.textFontSize,
+                                color: DesignConfig.titleColor,
+                              )),
+                          // contentPadding: EdgeInsets.all(4),
+                          onTap: () {
+                            Navigator.pop(context);
+                            Navigator.pushNamed(
+                                context, Routes.editProfile);
+                          },
+                        ),
+
+
+                      ListTile(
+                        title: Text('Products',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              fontSize: DesignConfig.textFontSize,
+                              color: DesignConfig.titleColor,
+                            )),
+                        // contentPadding: EdgeInsets.all(4),
+                        onTap: () {
+                          Navigator.pop(context);
+                          Navigator.pushNamed(
+                              context, Routes.home);
+                        },
+                      ),
+                      ListTile(
+                        title: Text('Blog',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              fontSize: DesignConfig.textFontSize,
+                              color: DesignConfig.titleColor,
+                            )),
+                        // contentPadding: EdgeInsets.all(4),
+                        onTap: () {
+                          Navigator.pop(context);
+                          Navigator.pushNamed(
+                              context, Routes.blog);
+                        },
+                      ),
+                      ListTile(
+                        title: Text('My Cart',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              fontSize: DesignConfig.textFontSize,
+                              color: DesignConfig.titleColor,
+                            )),
+                        // contentPadding: EdgeInsets.all(4),
+                        onTap: () {
+                          Navigator.pushNamed(
+                              context, Routes.cart);
+                        },
+                      ),
+                      ListTile(
+                        title: Text('Favorite',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              fontSize: DesignConfig.textFontSize,
+                              color: DesignConfig.titleColor,
+                            )),
+                        // contentPadding: EdgeInsets.all(4),
+                        onTap: () {
+                          Navigator.pushNamed(
+                              context, Routes.bookmark);
+                        },
+                      ),
+
+                      ListTile(
+                        title: Text('About Us',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              fontSize: DesignConfig.textFontSize,
+                              color: DesignConfig.titleColor,
+                            )),
+                        // contentPadding: EdgeInsets.all(4),
+                        onTap: () {
+                          Navigator.pushNamed(
+                              context, Routes.aboutUs);
+                        },
+                      ),
+                      ListTile(
+                        title: Text('Contact Us',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              fontSize: DesignConfig.textFontSize,
+                              color: DesignConfig.titleColor,
+                            )),
+                        // contentPadding: EdgeInsets.all(4),
+                        onTap: () {
+                          Navigator.pushNamed(
+                              context, Routes.contactUs);
+                        },
+                      ),
+                    ],
+                  );
+                }),
               ),
               Expanded(
                 flex: 1,

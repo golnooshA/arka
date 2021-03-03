@@ -24,7 +24,6 @@ class _BookmarkState extends State<Bookmark> {
     return Scaffold(
         backgroundColor: DesignConfig.backgroundColor,
         appBar: AppBar(
-          automaticallyImplyLeading: false,
           backgroundColor: Colors.transparent,
           iconTheme: IconThemeData(color: DesignConfig.appBarOptionsColor),
           elevation: 0,
