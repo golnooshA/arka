@@ -4,6 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:wood/page/blog/state.dart';
 import 'package:wood/page/bookmark/state.dart';
+import 'package:wood/page/cart/state.dart';
 import 'package:wood/page/discount/state.dart';
 import 'package:wood/page/gallery/state.dart';
 import 'package:wood/page/main/state.dart';
@@ -48,9 +49,10 @@ void main() {
         create: (context) => OneBlogController(),
       ),
 
-      ChangeNotifierProvider<GalleryController>(
-        create: (context) => GalleryController(),
+      ChangeNotifierProvider<CartController>(
+        create: (context) => CartController(),
       ),
+
 
 
     ],

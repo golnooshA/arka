@@ -36,7 +36,7 @@ class DiscountController extends ChangeNotifier{
 
 
 
-    String urlP = 'http://192.168.1.130:8000/api/api/offer-products';
+    String urlP = 'http://p.kavakwood-app.ir/api/api/offer-products';
     final res = await http.get(urlP);
 
     if (res.statusCode == 200) {

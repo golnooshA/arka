@@ -1,4 +1,5 @@
 import 'package:provider/provider.dart';
+import 'package:wood/core/router/routes.dart';
 import 'package:wood/data/product.dart';
 import 'package:wood/data/status.dart';
 import 'package:wood/page/main/scroll_state.dart';
@@ -14,6 +15,7 @@ import '../../core/config/design_config.dart';
 class Search extends StatefulWidget {
 
   final ScrollPageState scrollState;
+
 
   const Search({this.scrollState});
 
@@ -31,15 +33,15 @@ class _SearchState extends State<Search> {
   int page = 1;
 
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-  SearchStateController searchData;
+  SearchStateController _stateController;
 
   scrollListener() async {
     if (scrollController.offset >= scrollController.position.maxScrollExtent &&
         !scrollController.position.outOfRange) {
-      final searchData = Provider.of<SearchStateController>(context, listen: false);
-      if (searchData.status == Status.ready) {
+      final _stateController = Provider.of<SearchStateController>(context, listen: false);
+      if (_stateController.status == Status.ready) {
         page++;
-        await searchData.getProduct(searchText:'',refresh: true);
+        await _stateController.getProduct(searchText:'',refresh: true);
 
       }
     }
@@ -49,10 +51,8 @@ class _SearchState extends State<Search> {
   void initState() {
     scrollController = ScrollController();
     scrollController.addListener(scrollListener);
-    final searchData = Provider.of<SearchStateController>(context, listen: false);
-    Future.delayed(Duration.zero, () async {
-      searchData.getProduct(searchText:'',refresh: true);
-    });
+    _stateController = Provider.of<SearchStateController>(context, listen: false);
+    _stateController.getProduct(searchText:'', refresh: true);
     super.initState();
   }
 
@@ -99,8 +99,8 @@ class _SearchState extends State<Search> {
 
 
           Expanded(child: Consumer<SearchStateController>(
-            builder: (_, searchData, child){
-              switch (searchData.status) {
+            builder: (_, _stateController, child){
+              switch (_stateController.status) {
                 case Status.ready:
                   return CustomScrollView(
                     controller: scrollController,
@@ -108,10 +108,14 @@ class _SearchState extends State<Search> {
                       SliverList(
                         delegate: SliverChildBuilderDelegate(
                                 (context, index){
-                              final item = searchData.products[index];
-
+                              final item = _stateController.products[index];
+                              print("*********item**********$item");
                               return InkWrapper(
-                                onTap: (){},
+                                onTap: (){
+                                  Navigator.pushNamed(
+                                      context, Routes.oneProduct, arguments: item);
+
+                                },
                                 highlightColor: DesignConfig.highlightColor,
                                 splashColor: DesignConfig.splashColor,
                                 child: Container(
@@ -168,7 +172,7 @@ class _SearchState extends State<Search> {
                                 ),
                               );
                             },
-                            childCount: searchData.products.length
+                            childCount: _stateController.products.length
                         ),
                       )
                     ],
@@ -188,10 +192,10 @@ class _SearchState extends State<Search> {
                     children: [
                       child,
                       Error(
-                          message: searchData.errorMessage,
+                          message: _stateController.errorMessage,
                           buttonText: "try again",
                           onButtonTap: () {
-                            searchData.getProduct(searchText:'',refresh: true);
+                            _stateController.getProduct(searchText:'',refresh: true);
                           }) ],
                   );
               }
@@ -204,9 +208,11 @@ class _SearchState extends State<Search> {
 
   void onSearch(String val){
     if(val == null || val.trim() == ''){
+      print("*********val**********$val");
+
       val = '';
     }
     searchFocusNode.unfocus();
-    searchData.getProduct(searchText: val,refresh: true);
+    _stateController.getProduct(searchText: val);
   }
 }

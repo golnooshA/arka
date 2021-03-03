@@ -46,7 +46,7 @@ Future<T> showDialog<T>({
             m.Row(
               mainAxisAlignment: m.MainAxisAlignment.spaceEvenly,
               children: [
-                if(onOk != null) m.FlatButton(
+                if(onOk != null) m.MaterialButton(
                   onPressed: onOk,
                   color: DesignConfig.primaryColor,
                   child: m.Text(
@@ -56,7 +56,7 @@ Future<T> showDialog<T>({
                         color: m.Colors.white),
                   ),
                 ),
-                if(onCancel != null) m.FlatButton(
+                if(onCancel != null) m.MaterialButton(
                   onPressed: onCancel,
                   child: m.Text(
                     cancelText,

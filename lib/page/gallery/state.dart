@@ -1,59 +1,66 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:wood/component/http_request/http_request.dart';
+import 'package:http/http.dart' as http;
 import 'package:wood/data/product.dart';
 import 'package:wood/data/status.dart';
-import 'package:http/http.dart' as http;
+
 
 class GalleryController extends ChangeNotifier {
   Status status = Status.loading;
-  Status pagination = Status.ready;
 
   Product productData;
   List<String> images = [];
 
-  int totalPage = 1;
-
   String errorMessage;
 
-  Future<void> getImages({int id, bool refresh = false}) async  {
-
-    if (!refresh) {
-
-      status = Status.ready;
-      notifyListeners();
-    }
-
-    if( refresh){
-
-      status = Status.loading;
-      productData = null;
-    }
-
-    if(productData!=null){
-
-      status = Status.empty;
-    }
+  Future<void> getImages({int id, Status status,  bool refresh = false}) async {
+    // if (!refresh) {
+    //   status = Status.ready;
+    //   notifyListeners();
+    // }
+    //
+    // if (refresh) {
+    //   status = Status.loading;
+    //   productData = null;
+    // }
+    //
+    // if (productData != null) {
+    //   status = Status.empty;
+    // }
+    // notifyListeners();
 
     String url =
-        'http://192.168.1.130:8000/api/products/$id';
+        'http://p.kavakwood-app.ir/api/products/$id';
+
+    print("******URL******$url");
+
     final res = await http.get(url);
 
-    if (res.statusCode == 200) {
-
-      var json = jsonDecode(res.body);
+    print("******RES******$res");
 
 
+    var json = jsonDecode(res.body);
 
-      productData = Product.fromJson(json['product']);
-      images = List<String>.from(json['images'] == null ?  [] : json['images']);
-      print("*****Images******$images");
+    print("******Json******$json");
 
-      status = Status.ready;
+
+
+    if (json is! Map || json['product'] == null) {
+      errorMessage = 'no data';
+      status = Status.error;
       notifyListeners();
+      return;
     }
-    else{
-      throw Exception('***********Failed to load data************');
-    }
+    productData = Product.fromJson(json['product']);
+    images =
+    List<String>.from(json['images'] == null ? [] : json['images']);
+
+    print("******images******$images");
+    print("******product******$productData");
+    this.status = Status.ready;
+    notifyListeners();
+
   }
 
 }

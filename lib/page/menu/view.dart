@@ -42,7 +42,7 @@ class Menu extends StatelessWidget {
                           IconButton(
                               splashColor: DesignConfig.splashColor,
                               highlightColor: DesignConfig.highlightColor,
-                              icon: Icon(Icons.shopping_cart_outlined,
+                              icon: Icon(Icons.shopping_cart,
                                   size: 30,
 
                                   color: DesignConfig.appBarOptionsColor),

@@ -4,8 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:wood/component/http_request/http_request.dart';
+import 'package:wood/core/config/http_config.dart';
+import 'package:wood/core/localization/language.dart';
 import 'package:wood/data/province.dart';
 import 'package:wood/data/city.dart';
+import 'package:wood/data/result.dart';
 import 'package:wood/data/user.dart';
 
 class Settings extends ChangeNotifier {
@@ -482,5 +485,146 @@ class Settings extends ChangeNotifier {
   void setAskedLogin() {
     box.put('asked_login', true);
   }
+
+  Future<Result> login(int number, String password, {bool saveToDbOnSuccess = true, Language language}) async {
+    final res = await PostRequest(url: HttpConfig.url('api/login'), reqBody: {'number': number, 'password': password}).responseJson();
+
+    switch (res.status) {
+      case ReqStatus.success:
+        if (res.body is! Map) {
+          return Result(
+              isOk: false,
+              message: language.unknownError
+          );
+        }
+
+        _user = User.fromJson(
+          res.body['user'],
+          accessToken: res.body['access_token'],
+        );
+        Request.accessToken = _user.accessToken;
+
+        if (saveToDbOnSuccess) {
+          box.put('user', _user.toJson());
+        }
+        return Result(
+            isOk: true,
+            message: res.body['message'] == null ? 'Done!' : res.body['message']
+        );
+        break;
+
+      default:
+        if (res.body is Map && res.body['message'] != null) {
+          return Result(
+              isOk: false,
+              message: res.body['message']
+          );
+        } else {
+          return Result(
+              isOk: false,
+              message: language.unknownError
+          );
+        }
+        break;
+    }
+  }
+
+  bool isSoftLogin() {
+    return _user?.accessToken != null && _user?.number != null && _user?.id != null;
+  }
+
+  bool canPurchase() {
+    return _user?.city != null&& _user?.province != null && _user?.address != null && _user?.postalCode != null && _user.province.trim() != ''  && _user.city.trim() != ''  && _user.address.trim() != ''  && _user.postalCode.trim() != '' ;
+  }
+
+  void uiLogout({bool notify = true}) {
+    box.delete('user');
+    _user = null;
+    Request.accessToken = null;
+    if (notify) {
+      notifyListeners();
+    }
+  }
+
+  Future<void> logout({bool notify = true}) async {
+    await GetRequest(
+        url: HttpConfig.url('api/logout'),
+        headers: {"Authorization": "Bearer ${user.accessToken}", "Content-Type": "application/json"}).responseJson();
+    uiLogout(notify: notify);
+  }
+
+  void checkAndLogoutOnResponse(ResponseJson res, {bool notify = true}) {
+    if (res.body is Map && res.body['is_auth'] is bool && !res.body['is_auth']) {
+      uiLogout(notify: notify);
+    }
+  }
+
+  Future<Result> editProfile(
+      {String name, String postalCode, String address, String province, String city, bool saveToDbOnSuccess = true, Language language}) async {
+    final Map<String, String> body = {};
+
+    if (name != null) {
+      body['name'] = name;
+    }
+    if (postalCode != null) {
+      body['postal_code'] = postalCode;
+    }
+    if (address != null) {
+      body['address'] = address;
+    }
+    if (province != null) {
+      body['province'] = province;
+    }
+    if (city != null) {
+      body['city'] = city;
+    }
+
+    final res = await PostRequest(
+        url: HttpConfig.url('api/update-profile'),
+        reqBody: body,
+        headers: {"Authorization": "Bearer ${user.accessToken}", "Content-Type": "application/json"}).responseJson();
+
+    checkAndLogoutOnResponse(res);
+    switch (res.status) {
+      case ReqStatus.success:
+        if (res.body is! Map) {
+          return Result(
+              isOk: false,
+              message: language.unknownError
+          );
+        }
+
+        _user = User.fromJson(res.body['user'], accessToken: user.accessToken);
+
+        if (saveToDbOnSuccess) {
+          box.put('user', _user.toJson());
+        }
+
+        return Result(
+            isOk: true,
+            message: res.body['message'] == null ? 'Done!' : res.body['message']
+        );
+        break;
+
+      default:
+        if (res.body is Map && res.body['message'] != null) {
+          return Result(
+              isOk: false,
+              message: res.body['message']
+          );
+        } else {
+          return Result(
+              isOk: false,
+              message: language.unknownError
+          );
+        }
+        break;
+    }
+  }
+
+  void notify() {
+    notifyListeners();
+  }
+
 
 }

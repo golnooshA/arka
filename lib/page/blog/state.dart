@@ -30,7 +30,7 @@ class BlogController extends ChangeNotifier {
     }
     notifyListeners();
 
-    String urlP = 'http://192.168.1.130:8000/api/posts';
+    String urlP = 'http://p.kavakwood-app.ir/api/posts';
     final res = await http.get(urlP);
 
     if (res.statusCode == 200) {

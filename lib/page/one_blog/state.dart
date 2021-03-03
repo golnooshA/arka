@@ -40,7 +40,7 @@ class OneBlogController extends ChangeNotifier {
     }
 
     String url =
-        'http://192.168.1.130:8000/api/posts/$id';
+        'http://p.kavakwood-app.ir/api/posts/$id';
     final res = await http.get(url);
 
     if (res.statusCode == 200) {

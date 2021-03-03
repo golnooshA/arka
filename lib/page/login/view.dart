@@ -1,7 +1,13 @@
+import 'package:provider/provider.dart';
+import 'package:wood/core/localization/language.dart';
+import 'package:wood/core/router/routes.dart';
+import 'package:wood/core/storage/settings.dart';
 import 'package:wood/widget/button_text.dart';
 import 'package:wood/widget/form.dart';
 import 'package:flutter/material.dart';
+import 'package:wood/widget/set_state.dart';
 import '../../core/config/design_config.dart';
+import 'package:wood/core/helper/ui.dart' as ui;
 
 class Login extends StatefulWidget {
   @override
@@ -15,14 +21,66 @@ class _LoginState extends State<Login> {
   final FocusNode numberFocusNode = FocusNode();
   final FocusNode passwordFocusNode = FocusNode();
 
+  final SetStateController buttonController = SetStateController();
+
+  Settings settings;
+  Language language;
+
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+
+  void initState() {
+    if(settings == null){
+      settings = Provider.of<Settings>(context, listen: false);
+    }
+
+    super.initState();
+  }
+
+  Future<void> sendInformation(BuildContext context) async{
+
+    final number = int.tryParse(numberController.text.trim());
+
+    if(number == null){
+      return ui.showSnackBar(
+        context: context,
+        text: "fill all box"
+      );
+
+    }
+
+    if(passwordController.text.length <6){
+     return ui.showSnackBar(
+        context: context,
+        text: 'fill more than 5 character'
+      );
+    }
+
+    buttonController.setState();
+    final res = await settings.login(number, passwordController.text, language: language);
+    buttonController.setState();
+
+    ui.showSnackBar(
+        context: context,
+        text: 'login to app'
+    );
+    if(res.isOk){
+      Navigator.pushNamedAndRemoveUntil(context, Routes.home, (route) => false);
+    }
+
+
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         key: scaffoldKey,
         backgroundColor: Color(0xFFFFF7ED),
-        body: CustomScrollView(
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          iconTheme: IconThemeData(color: DesignConfig.textColor),
+        ),
+        body:CustomScrollView(
           slivers: [
 
             SliverToBoxAdapter(
@@ -68,17 +126,28 @@ class _LoginState extends State<Login> {
                         keyboardType: TextInputType.text,
                         keyboardButtonAction: TextInputAction.search,
                         focusNode: passwordFocusNode,
-                        onFieldSubmitted: (s) {},
+                        onFieldSubmitted: (s) {
+
+                            sendInformation(context);
+
+                        },
                       ),
-                      ButtonText(
-                          textColor: DesignConfig.textFieldColor,
-                          minWidth: MediaQuery.of(context).size.width,
-                          text: 'LOGIN',
-                          buttonColor: Colors.transparent,
-                          borderColor: DesignConfig.textFieldColor,
-                          onTap: (){},
-                          height: 50,
-                      margin: EdgeInsets.only(bottom: 20)),
+                    SetState(
+                      controller: buttonController,
+                      builder: (){
+                        return   ButtonText(
+                            textColor: DesignConfig.textFieldColor,
+                            minWidth: MediaQuery.of(context).size.width,
+                            text: 'LOGIN',
+                            buttonColor: Colors.transparent,
+                            borderColor: DesignConfig.textFieldColor,
+                            onTap: (){
+                              sendInformation(context);
+                            },
+                            height: 50,
+                            margin: EdgeInsets.only(bottom: 20));
+                      },
+                    )
                     ],
                   )
               ),

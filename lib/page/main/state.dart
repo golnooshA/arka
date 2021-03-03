@@ -15,7 +15,7 @@ class MainController extends ChangeNotifier{
   List<Category> categories = [];
   List<Product> products = [];
 
-  int totalPage =1;
+  int totalPage = 1;
 
   String errorMessage;
 
@@ -36,7 +36,7 @@ class MainController extends ChangeNotifier{
       }
 
       String url =
-          'http://192.168.1.130:8000/api/api/main-category/CategoryStore';
+          'http://p.kavakwood-app.ir/api/api/main-category/CategoryStore';
 
       final res = await http.get(url);
 
@@ -77,7 +77,7 @@ class MainController extends ChangeNotifier{
       }
 
       String url =
-          'http://192.168.1.130:8000/api/api/sub-category/CategoryStore/$id';
+          'http://p.kavakwood-app.ir/api/api/sub-category/CategoryStore/$id';
 
       final res = await http.get(url);
 
@@ -135,13 +135,13 @@ class MainController extends ChangeNotifier{
 
 
 
-      String urlP = 'http://192.168.1.130:8000/api/api/main-category/CategoryStore?page=$page';
+      String urlP = 'http://p.kavakwood-app.ir/api/api/main-category/CategoryStore?page=$page';
       final res = await http.get(urlP);
 
       if (res.statusCode == 200) {
 
         var json = jsonDecode(res.body);
-        totalPage = json["products"]["total"];
+        totalPage = json["products"]["last_page"];
         List<dynamic> productData = json["products"]["data"];
 
         if(totalPage >= page){
@@ -152,7 +152,7 @@ class MainController extends ChangeNotifier{
               errorMessage = 'اطلاعات وجود ندارد';
             }
             else
-              status = Status.ready;
+              status = Status.loading;
           });
         }
         status = Status.ready;
@@ -191,13 +191,13 @@ class MainController extends ChangeNotifier{
       notifyListeners();
 
 
-      String urlP = 'http://192.168.1.130:8000/api/api/sub-category/CategoryStore/$id?page=$page';
+      String urlP = 'http://p.kavakwood-app.ir/api/api/sub-category/CategoryStore/$id?page=$page';
       final res = await http.get(urlP);
 
       if (res.statusCode == 200) {
 
         var json = jsonDecode(res.body);
-        totalPage = json["products"]['total'];
+        totalPage = json["products"]['last_page'];
         List<dynamic> productData = json["products"]['data'];
 
         if(totalPage >= page ){

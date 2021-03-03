@@ -17,6 +17,7 @@ import 'package:wood/page/one_blog/state.dart';
 import 'package:wood/page/one_blog/view.dart';
 import 'package:wood/page/one_product/view.dart';
 import 'package:wood/page/page_not_found/view.dart';
+import 'package:wood/page/search/state.dart';
 import 'package:wood/page/search/view.dart';
 import 'package:wood/page/cart/view.dart';
 import 'package:flutter/material.dart';
@@ -64,7 +65,10 @@ class Routes {
         break;
 
       case Routes.search:
-        page = Search();
+        page = ChangeNotifierProvider<SearchStateController>(
+          create: (_) => SearchStateController(),
+          child: Search(),
+        );
         break;
 
       case Routes.menu:

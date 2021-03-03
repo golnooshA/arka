@@ -17,9 +17,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:wood/core/config/design_config.dart';
-import 'package:wood/widget/timer_text.dart';
 import 'scroll_state.dart';
-import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
+
 
 class Main extends StatefulWidget {
   final ScrollPageState scrollState;
@@ -101,6 +100,7 @@ class _MainState extends State<Main> {
               case Status.ready:
                 return RefreshIndicator(
                     onRefresh: () async {
+                      page = 1;
                       await mainData.getData(id: widget.id, refresh: true);
                       await mainData.getProduct(
                           id: widget.id, page: page, refresh: true);

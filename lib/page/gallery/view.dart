@@ -32,11 +32,8 @@ class _GalleryState extends State<Gallery> {
   ScrollController scrollController;
 
   void initState() {
-    scrollController = ScrollController();
     final galleryData = Provider.of<GalleryController>(context, listen: false);
-    Future.delayed(Duration.zero, () async {
-      galleryData.getImages(id: widget.id);
-    }).then((value) {
+    galleryData.getImages(id: widget.id).then((value) {
       galleryView = makeGalleryViews(galleryData.images, galleryData);
     });
     super.initState();
@@ -120,14 +117,17 @@ class _GalleryState extends State<Gallery> {
     );
   }
 
-  List<GalleryView> makeGalleryViews(List<String> images, GalleryController galleryData){
+  List<GalleryView> makeGalleryViews(List<String> images, GalleryController stateController){
     final List<GalleryView> list = [];
     for(int i=0, len=images.length; i<len; i++){
       list.add(GalleryView(
-        photos: galleryData.images.map((e) => HttpConfig.url(e, isApi: false)).toList(),
+        photos: stateController.images.map((e) => HttpConfig.url(e, isApi: false)).toList(),
         initialIndex: i,
       ));
     }
+
+    print("******list******$list");
+
     return list;
   }
 

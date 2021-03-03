@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:wood/component/list_view_controller/list_view_controller.dart';
 import 'package:wood/data/product.dart';
 import 'package:wood/data/status.dart';
 import 'package:http/http.dart' as http;
@@ -9,39 +8,33 @@ import 'package:http/http.dart' as http;
 class SearchStateController extends ChangeNotifier{
 
   Status status = Status.loading;
-
   List<Product> products = [];
-
   String errorMessage;
-
-  ListViewController listViewController;
-
 
 
   Future<void> getProduct({String searchText,bool refresh = false}) async {
 
-    if (products.length > 0 && !refresh) {
-      status = Status.ready;
-      notifyListeners();
-    }
 
-    else{
-      if (refresh) {
-        status = Status.loading;
-        products = [];
-      }
-    }
-
-    notifyListeners();
+    String urlP = 'http://p.kavakwood-app.ir/api/api/search/ProductStore?search=$searchText';
+    print("********* URLP **********$urlP");
 
 
-    String urlP = 'http://192.168.1.130:8000/api/api/search/ProductStore?search=$searchText';
+
     final res = await http.get(urlP);
+
+    print("*********RESponse**********$res");
+
 
     if (res.statusCode == 200) {
 
       var json = jsonDecode(res.body);
+
+      print("*********json**********$json");
+
       List<dynamic> productData = json["products"]["data"];
+
+      print("*********productData**********$productData");
+
 
       productData.forEach((element) {
         products = productData.map((e) => Product.fromJson(e)).toList();
@@ -59,8 +52,6 @@ class SearchStateController extends ChangeNotifier{
     else{
       throw Exception('***********Failed to load data************');
     }
-
   }
-
 
 }
