@@ -167,7 +167,7 @@ class CartController extends ChangeNotifier{
   }
 
   Future<void> removeFromCart(Product product, {bool notify = false}) async {
-    await removeFromCartStrage(product.id);
+    await removeFromCartStorage(product.id);
     list.removeWhere((element) => element.id == product.id);
     await _setMapCart();
     if(ids.isEmpty){
@@ -196,7 +196,7 @@ class CartController extends ChangeNotifier{
     });
   }
 
-  Future<void> removeFromCartStrage(int id) async {
+  Future<void> removeFromCartStorage(int id) async {
     final Box box = await Hive.openBox('cart');
     await box.delete(id);
   }

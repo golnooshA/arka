@@ -96,29 +96,53 @@ class Product {
         cart = false,
         bookmark = false;
 
-  Map<String, dynamic> toJson() => {
-        'id': id.toString(),
-        'name': name,
-        'description': description,
-        'price': price,
-        'image': image,
-        'cart': cart,
-        'thickness': thickness,
-        'size': size,
-        'weight': weight,
-        'offerDate': offerDate,
-        'offerDateFarsi': offerDateFarsi,
-        'offerPrice': offerPrice,
-        'thumbnail': thumbnail,
-        'createdAt': createdAt,
-        'updatedAt': updatedAt,
-        'stripDesc': stripDesc,
-        'number': number,
-        'offerRemaining': offerRemaining,
-        'bookmark': bookmark,
-        'stock': stock,
-        'count': count
-      };
+  Map toJson(){
+    final m = {
+      'id': id,
+      'name': name,
+      'from_data': true
+    };
+    if(description != null){
+      m['description'] = description;
+    }
+    if(size != null){
+      m['size'] = size;
+    }
+    if(thickness != null){
+      m['thickness'] = thickness;
+    }
+    if(stock != null){
+      m['stock'] = stock;
+    }
+    if(weight != null){
+      m['weight'] = weight;
+    }
+    if(stripDesc != null){
+      m['strip_desc'] = stripDesc;
+    }
+    if(price != null){
+      m['price'] = price;
+    }
+    if(number != null){
+      m['number'] = number;
+    }
+    if(count != null){
+      m['count'] = count;
+    }
+    if(offerPrice != null){
+      m['offer_price'] = offerPrice;
+    }
+    if(offerRemaining != null){
+      m['offer_remaining'] = offerRemaining.inSeconds;
+    }
+    if(gallery != null){
+      m['images'] = gallery;
+    }
+    if(image != null){
+      m['image'] = image;
+    }
+    return m;
+  }
 
   int getTotalPrice([int count]) {
     return (count ?? this.count ?? 0) * (price ?? 0);

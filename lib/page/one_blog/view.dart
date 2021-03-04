@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wood/component/post_slider.dart';
+import 'package:wood/component/post_video.dart';
+import 'package:wood/component/video_view/video_player_component/video_player_component.dart';
 import 'package:wood/data/article.dart';
 import 'package:wood/data/status.dart';
 import 'package:wood/page/one_blog/state.dart';
-import 'package:wood/widget/default_network_image.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:flutter_widget_from_html_core/apt/html_options.dart';
-import 'package:wood/widget/error.dart';
-import 'package:wood/widget/loading.dart';
 import '../../core/config/design_config.dart';
-
 
 
 class OneBlog extends StatefulWidget {
@@ -24,6 +23,7 @@ class OneBlog extends StatefulWidget {
 
 class _OneBlogState extends State<OneBlog> {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  AptVideoPlayer videoPlayer;
 
 
   void initState() {
@@ -47,18 +47,26 @@ class _OneBlogState extends State<OneBlog> {
       body: Consumer<OneBlogController>(
         builder: (_, blogData, child) {
 
-          print("**********before consumer**********");
 
           return CustomScrollView(
             slivers: [
               SliverToBoxAdapter(
-                child: DefaultNetworkImage(
-                  url: widget.article.image,
-                  // url: 'https://shop98ia.ir/upload/2019/12/06/c5fac9159f002d0-6ba7d6869f3-07b0c467832.jpg',
-                  fit: BoxFit.cover,
-                  margin: EdgeInsets.zero,
+                child: blogData.postData.hasVideo() ?
+                PostVideo(
                   height: MediaQuery.of(context).size.height / 2.3,
                   width: MediaQuery.of(context).size.width,
+                  videoUrl: blogData.postData.video,
+                  coverUrl: blogData.postData.image,
+                ):
+                blogData.status == Status.ready ?
+                PostSlider(
+                  height: MediaQuery.of(context).size.height / 2.3,
+                  width: MediaQuery.of(context).size.width,
+                  imageUrls: blogData.images,
+                ) : Container(
+                  height: MediaQuery.of(context).size.height / 2.3,
+                  width: MediaQuery.of(context).size.width,
+                  color: Colors.blueGrey,
                 ),
               ),
 

@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:wood/widget/linear_progress.dart';
 import '../../core/config/design_config.dart';
 import 'package:wood/core/helper/ui.dart' as ui;
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
+import 'package:flutter_widget_from_html_core/apt/html_options.dart';
 
 class OneProduct extends StatefulWidget {
   final Product oneProduct;
@@ -414,6 +416,39 @@ class _OneProductState extends State<OneProduct> {
                                                               100,
                                                       backgroundColor: DesignConfig
                                                           .halfFullProductColor),
+                                                ),
+                                              ),
+                                              ListTile(
+                                                title: Text(
+                                                  'Description',
+                                                  textDirection:
+                                                  TextDirection.ltr,
+                                                  textAlign: TextAlign.start,
+                                                  style: TextStyle(
+                                                      color: DesignConfig
+                                                          .titleColor,
+                                                      fontSize: DesignConfig
+                                                          .mediumFontSize,
+                                                      fontWeight:
+                                                      FontWeight.w600),
+                                                ),
+                                                subtitle: Padding(
+                                                  padding: EdgeInsets.only(
+                                                      top: 8, bottom: 12),
+                                                  child: HtmlWidget(
+                                                    widget.oneProduct.description,
+                                                    textStyle: TextStyle(
+                                                      fontSize: DesignConfig.textFontSize,
+                                                      color: Colors.black,
+                                                    ),
+                                                    htmlOptions: HtmlOptions(
+                                                      direction: TextDirection.ltr,
+                                                      textAlign: TextAlign.justify,
+                                                      textFontSize: DesignConfig.textFontSize,
+                                                      textColor: Colors.black,
+                                                      selectableText: true,
+                                                    ),
+                                                  ),
                                                 ),
                                               ),
                                             ],

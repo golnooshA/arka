@@ -14,7 +14,7 @@ class Article {
   final String image;
   final String video;
 
-
+  static const fileTypeMp4 = 'mp4';
 
   Article.fromJson(Map<String, dynamic> json)
       : id = json['id'],
@@ -44,4 +44,7 @@ class Article {
         'video': video,
       };
 
+  bool hasVideo(){
+    return fileType == fileTypeMp4 && video != null;
+  }
 }
